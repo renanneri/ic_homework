@@ -17,9 +17,10 @@ def plot_result_score_model(results,scoring,param):
 
         ax = plt.gca()
 
-        results_df = pd.DataFrame(results).groupby(['param_C']).mean()
-        max = pd.DataFrame(results).groupby(['param_C']).max(numeric_only=True)
-        min = pd.DataFrame(results).groupby(['param_C']).min(numeric_only=True)
+        results_df = pd.DataFrame(results).groupby(['param_{}'.format(param)]).mean()
+                
+        max = pd.DataFrame(results).groupby(['param_{}'.format(param)]).max(numeric_only=True)
+        min = pd.DataFrame(results).groupby(['param_{}'.format(param)]).min(numeric_only=True)
         # Get the regular numpy array from the MaskedArray
         X_axis = results_df.index
 
@@ -45,8 +46,11 @@ def plot_result_score_model(results,scoring,param):
 
 
         # Annotate the best score for that scorer
-        ax.annotate("%0.2f" % best_score,
+        if(isinstance(best_index, float)):
+            ax.annotate("%0.2f" % best_score,
                     (best_index + 0.01, best_score + 0.010))
+        else:
+            ax.annotate("%0.2f" % best_score, (best_index, best_score + 0.010))
 
         plt.legend(loc="best")
         plt.grid(False)
